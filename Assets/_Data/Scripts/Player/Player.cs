@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace U2
     {
         #region [Abilities]
         [Header("# Move infos")]
+        public bool runBegun;
         [SerializeField] private float moveSpeed;
 
         [Header("# Jump infos")]
@@ -18,6 +20,9 @@ namespace U2
 
 
         [Header("# Collision check")]
+        [SerializeField] private LayerMask whatisground;
+        [SerializeField] private float groundCheckDistance;
+        private bool isGrounded;
 
         // Components
         private Rigidbody2D rb;
@@ -40,14 +45,39 @@ namespace U2
 
         private void Update()
         {
-            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+            Movement();
+            CollisionCheck();
 
-            if(Input.GetButton("Jump"))
+            CheckInput();
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawLine(transform.position, new Vector2(transform.position.x, transform.position.y - groundCheckDistance));
+        }
+
+        #endregion
+
+        private void CollisionCheck()
+        {
+            isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, whatisground);
+        }
+
+        private void CheckInput()
+        {
+            if (Input.GetButtonDown("Jump") && isGrounded)
             {
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
         }
 
-        #endregion
+        private void Movement()
+        {
+            if(!runBegun)
+            {
+                return;
+            }
+            rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+        }
     }
 }
