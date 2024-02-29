@@ -32,7 +32,7 @@ namespace U2
 
         // Components
         private Rigidbody2D rb;
-        private Animator animator;
+        private Animator anim;
 
         #endregion
 
@@ -41,7 +41,7 @@ namespace U2
         private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
-            animator = GetComponent<Animator>();
+            anim = GetComponent<Animator>();
         }
 
         private void Start()
@@ -69,10 +69,17 @@ namespace U2
 
         private void AnimatorCtrl()
         {
-            animator.SetFloat(moveAnim, rb.velocity.x);
-            animator.SetFloat(jumpAnim, rb.velocity.y);
+            anim.SetFloat("xVelocity", rb.velocity.x);
+            anim.SetFloat("yVelocity", rb.velocity.y);
 
-            animator.SetBool(isGroundAnim, isGrounded);
+            anim.SetBool("isGrounded", isGrounded);
+            //anim.SetBool("canDoubleJump", canDoubleJump);
+            //anim.SetBool("isSliding", isSliding);
+            //anim.SetBool("canClimb", canClimb);
+            //anim.SetBool("isKnocked", isKnocked);
+
+            if (rb.velocity.y < -20)
+                anim.SetBool("canRoll", true);
         }
 
         private void CollisionCheck()
