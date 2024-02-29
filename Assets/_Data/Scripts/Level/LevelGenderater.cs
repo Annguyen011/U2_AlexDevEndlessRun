@@ -39,7 +39,7 @@ namespace U2
 
             Transform partToDelete  = transform.GetChild(0);
 
-            if(Vector2.Distance(player.transform.position, partToDelete.position) > distanceToDelete)
+            if(Vector2.Distance(player.transform.position, partToDelete.position) >= distanceToDelete)
             {
                 Destroy(partToDelete.gameObject);
             }
