@@ -12,7 +12,7 @@ namespace U2
     {
         #region [Abilities]
         [Header("# Move infos")]
-        public bool runBegun;
+        public bool playerUnlock;
         [SerializeField] private float moveSpeed;
 
         [Header("# Jump infos")]
@@ -23,6 +23,12 @@ namespace U2
         [SerializeField] private LayerMask whatisground;
         [SerializeField] private float groundCheckDistance;
         private bool isGrounded;
+
+        [Header("# Animator")]
+        [SerializeField] private string moveAnim;
+        [SerializeField] private string jumpAnim;
+        [SerializeField] private string slideAnim;
+        [SerializeField] private string isGroundAnim;
 
         // Components
         private Rigidbody2D rb;
@@ -45,11 +51,14 @@ namespace U2
 
         private void Update()
         {
+            AnimatorCtrl();
             Movement();
             CollisionCheck();
 
             CheckInput();
         }
+
+       
 
         private void OnDrawGizmos()
         {
@@ -57,6 +66,14 @@ namespace U2
         }
 
         #endregion
+
+        private void AnimatorCtrl()
+        {
+            animator.SetFloat(moveAnim, rb.velocity.x);
+            animator.SetFloat(jumpAnim, rb.velocity.y);
+
+            animator.SetBool(isGroundAnim, isGrounded);
+        }
 
         private void CollisionCheck()
         {
@@ -73,7 +90,7 @@ namespace U2
 
         private void Movement()
         {
-            if(!runBegun)
+            if(!playerUnlock)
             {
                 return;
             }

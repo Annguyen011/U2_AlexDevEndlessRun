@@ -44049,13 +44049,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b9be85142776344c98f6af2a559958e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runBegun: 0
+  playerUnlock: 0
   moveSpeed: 2
   jumpForce: 18
   whatisground:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 1.42
+  moveAnim: xVelocity
+  jumpAnim: yVelocity
+  slideAnim: 
+  isGroundAnim: isGrounded
 --- !u!1 &1903561525
 GameObject:
   m_ObjectHideFlags: 0
