@@ -23,7 +23,9 @@ namespace U2
         [Header("# Slide infos")]
         [SerializeField] private float slideSpeed;
         [SerializeField] private float slideTime;
+        [SerializeField] private float slideCoolDon;
         private float slideTimeCounter;
+        private float slideCoolDonCounter;
         private bool isSliding;
 
         [Header("# Collision check")]
@@ -32,8 +34,11 @@ namespace U2
         [Space]
         [SerializeField] private Transform wallCheck;
         [SerializeField] private Vector2 wallCheckSize;
+        [Space]
+        [SerializeField] private float ceilingCheckDistance;
         private bool isGrounded;
         private bool wallDetected;
+        private bool ceilingDetected;
 
 
         [Header("# Animator")]
@@ -67,8 +72,9 @@ namespace U2
             Movement();
             CollisionCheck();
 
-            // Slide
+            // TimeCounter
             slideTimeCounter -= Time.deltaTime;
+            slideCoolDonCounter-= Time.deltaTime;   
 
             if (isGrounded)
             {
@@ -85,6 +91,10 @@ namespace U2
         {
             Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,
                 transform.position.y - groundCheckDistance));
+            
+            Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,
+                transform.position.y + ceilingCheckDistance));
+
             Gizmos.DrawWireCube(wallCheck.position, wallCheckSize);
         }
 
@@ -112,6 +122,9 @@ namespace U2
 
             wallDetected = Physics2D.BoxCast(wallCheck.position,
                 wallCheckSize, 0, Vector2.zero, 0, whatisground);
+
+            ceilingDetected = Physics2D.Raycast(transform.position, Vector2.up,
+                ceilingCheckDistance, whatisground);
         }
 
         private void CheckInput()
@@ -167,13 +180,18 @@ namespace U2
 
         private void SlideButton()
         {
+            if (slideCoolDonCounter > 0)
+            {
+                return;
+            }
+            slideCoolDonCounter = slideCoolDon;
             slideTimeCounter = slideTime;
             isSliding = true;
         }
 
         private void CheckForSlide()
         {
-            if(slideTimeCounter <= 0)
+            if(slideTimeCounter <= 0 && !ceilingDetected)
             {
                 isSliding = false;
             }

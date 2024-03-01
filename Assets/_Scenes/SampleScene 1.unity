@@ -44426,7 +44426,8 @@ MonoBehaviour:
   jumpForce: 18
   doubleJumpForce: 14
   slideSpeed: 15
-  slideTime: 0
+  slideTime: 0.4
+  slideCoolDon: 1
   whatisground:
     serializedVersion: 2
     m_Bits: 8
