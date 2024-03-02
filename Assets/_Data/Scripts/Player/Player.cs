@@ -28,8 +28,17 @@ namespace U2
         private float slideCoolDonCounter;
         private bool isSliding;
 
+        [Header("# Ledge infos")]
+        public bool ledgeDetected;
+        [SerializeField] private Vector2 offset1 = new Vector2(-.5f, -1.23f);
+        [SerializeField] private Vector2 offset2 = new Vector2(.57f, 1.33f);
+        private Vector2 startLedgeOffset;
+        private Vector2 endLedgeOffset;
+        private bool canGrabLedge = true;
+        private bool canClimb;
+
         [Header("# Collision check")]
-        [SerializeField] private LayerMask whatisground;
+        public LayerMask whatisground;
         [SerializeField] private float groundCheckDistance;
         [Space]
         [SerializeField] private Transform wallCheck;
@@ -74,13 +83,14 @@ namespace U2
 
             // TimeCounter
             slideTimeCounter -= Time.deltaTime;
-            slideCoolDonCounter-= Time.deltaTime;   
+            slideCoolDonCounter -= Time.deltaTime;
 
             if (isGrounded)
             {
                 canDoubleJump = true;
             }
 
+            CheckForLedge();
             CheckForSlide();
             CheckInput();
         }
@@ -91,7 +101,7 @@ namespace U2
         {
             Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,
                 transform.position.y - groundCheckDistance));
-            
+
             Gizmos.DrawLine(transform.position, new Vector2(transform.position.x,
                 transform.position.y + ceilingCheckDistance));
 
@@ -108,7 +118,7 @@ namespace U2
             anim.SetBool("isGrounded", isGrounded);
             anim.SetBool("canDoubleJump", canDoubleJump);
             anim.SetBool("isSliding", isSliding);
-            //anim.SetBool("canClimb", canClimb);
+            anim.SetBool("canClimb", canClimb);
             //anim.SetBool("isKnocked", isKnocked);
 
             if (rb.velocity.y < -20)
@@ -144,9 +154,13 @@ namespace U2
 
         private void JumpButton()
         {
+            if (isSliding)
+            {
+                return;
+            }
+
             if (isGrounded)
             {
-
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             }
             else if (canDoubleJump)
@@ -158,7 +172,12 @@ namespace U2
 
         private void Movement()
         {
-            if (!playerUnlock && wallDetected)
+            if (playerUnlock)
+            {
+                return;
+            }
+
+            if (wallDetected)
             {
                 return;
             }
@@ -191,10 +210,43 @@ namespace U2
 
         private void CheckForSlide()
         {
-            if(slideTimeCounter <= 0 && !ceilingDetected)
+            if (slideTimeCounter <= 0 && !ceilingDetected)
             {
                 isSliding = false;
             }
+        }
+
+        // Ledge
+        private void CheckForLedge()
+        {
+            if (ledgeDetected && canGrabLedge)
+            {
+                canGrabLedge = false;
+
+                Vector2 ledgePos = GetComponentInChildren<LedgeDetection>().transform.position;
+
+                startLedgeOffset = ledgePos + offset1;
+                endLedgeOffset = ledgePos + offset2;
+
+                canClimb = true;
+            }
+
+            if (canClimb)
+            {
+                transform.position = startLedgeOffset;
+            }
+        }
+
+        private void LedgeClimbOver()
+        {
+            canClimb = false;
+            transform.position = endLedgeOffset;
+            Invoke(nameof(AllowLedgeCrab), .1f);
+        }
+
+        private void AllowLedgeCrab()
+        {
+             canGrabLedge = true;
         }
 
         #endregion

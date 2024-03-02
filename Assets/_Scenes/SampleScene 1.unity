@@ -43622,6 +43622,7 @@ GameObject:
   - component: {fileID: 1846020553}
   - component: {fileID: 1846020555}
   - component: {fileID: 1846020556}
+  - component: {fileID: 1846020557}
   m_Layer: 6
   m_Name: LedgeCheck
   m_TagString: Untagged
@@ -43716,6 +43717,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!114 &1846020557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1846020552}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 787ee95c4f37d77468192224d0a5ceed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  radius: 0.29
 --- !u!1 &1850531428
 GameObject:
   m_ObjectHideFlags: 0
@@ -44428,12 +44442,16 @@ MonoBehaviour:
   slideSpeed: 15
   slideTime: 0.4
   slideCoolDon: 1
+  ledgeDetected: 0
+  offset1: {x: 0, y: 0}
+  offset2: {x: 0, y: 0}
   whatisground:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 1.42
   wallCheck: {fileID: 1165630194}
   wallCheckSize: {x: 0.5, y: 2}
+  ceilingCheckDistance: 1
   moveAnim: xVelocity
   jumpAnim: yVelocity
   slideAnim: 
