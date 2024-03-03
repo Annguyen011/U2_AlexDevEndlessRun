@@ -44437,6 +44437,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerUnlock: 1
   moveSpeed: 2
+  maxSpeed: 20
+  speedMuiltipler: 1.5
+  minstoneIncreaser: 50
   jumpForce: 18
   doubleJumpForce: 14
   slideSpeed: 15

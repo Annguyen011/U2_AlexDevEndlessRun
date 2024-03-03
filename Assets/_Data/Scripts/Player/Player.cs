@@ -14,6 +14,12 @@ namespace U2
         [Header("# Move infos")]
         public bool playerUnlock;
         [SerializeField] private float moveSpeed;
+        [SerializeField] private float maxSpeed;
+        [SerializeField] private float speedMuiltipler;
+        [SerializeField] private float minstoneIncreaser;
+        private float speedMinstone;
+        private float defaultSpeed;
+        private float defaultMilestoneIncrease;
 
         [Header("# Jump infos")]
         [SerializeField] private float jumpForce;
@@ -72,7 +78,10 @@ namespace U2
 
         private void Start()
         {
+            speedMinstone = minstoneIncreaser;
 
+            defaultMilestoneIncrease = minstoneIncreaser;
+            defaultSpeed = moveSpeed;
         }
 
         private void Update()
@@ -172,6 +181,8 @@ namespace U2
 
         private void Movement()
         {
+            SpeedCtrl();
+
             if (playerUnlock)
             {
                 return;
@@ -179,7 +190,7 @@ namespace U2
 
             if (wallDetected)
             {
-                return;
+                SpeedReset();
             }
 
             if (isSliding)
@@ -190,6 +201,31 @@ namespace U2
             else
             {
                 rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+            }
+        }
+
+        private void SpeedReset()
+        {
+            moveSpeed = defaultSpeed; ;
+            minstoneIncreaser = defaultMilestoneIncrease;
+        }
+
+        private void SpeedCtrl()
+        {
+            if (moveSpeed == maxSpeed)
+                return;
+
+            if(transform.position.x > speedMinstone)
+            {
+                speedMinstone = speedMinstone + minstoneIncreaser;
+
+                moveSpeed *= speedMuiltipler;
+                minstoneIncreaser *= speedMuiltipler;
+
+                if(moveSpeed > maxSpeed)
+                {
+                    moveSpeed = maxSpeed;
+                }
             }
         }
         #endregion
