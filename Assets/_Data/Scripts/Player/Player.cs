@@ -43,6 +43,10 @@ namespace U2
         private bool canGrabLedge = true;
         private bool canClimb;
 
+        [Header("# Knock")]
+        [SerializeField] private Vector2 knockbackDir = new Vector2(-12, 7);
+        private bool isKnocked;
+
         [Header("# Collision check")]
         public LayerMask whatisground;
         [SerializeField] private float groundCheckDistance;
@@ -87,6 +91,10 @@ namespace U2
         private void Update()
         {
             AnimatorCtrl();
+            if(isKnocked)
+            {
+                return;
+            }
             Movement();
             CollisionCheck();
 
@@ -128,7 +136,7 @@ namespace U2
             anim.SetBool("canDoubleJump", canDoubleJump);
             anim.SetBool("isSliding", isSliding);
             anim.SetBool("canClimb", canClimb);
-            //anim.SetBool("isKnocked", isKnocked);
+            anim.SetBool("isKnocked", isKnocked);
 
             if (rb.velocity.y < -20)
                 anim.SetBool("canRoll", true);
@@ -285,6 +293,25 @@ namespace U2
         private void AllowLedgeCrab()
         {
              canGrabLedge = true;
+        }
+
+        // Knock back
+        private void Knockback()
+        {
+            isKnocked = true;
+            rb.velocity = knockbackDir;
+        }
+
+        private void CancelKnockback()
+        {
+            isKnocked = false;
+        }
+
+        // Invicibility
+        private IEnumerator Invicibility()
+        {
+
+            yield return new WaitForSeconds(.5f);
         }
 
         #endregion
