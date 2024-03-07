@@ -257,6 +257,8 @@ namespace U2
         {
             if (ledgeDetected && canGrabLedge)
             {
+                rb.gravityScale = 0f;
+
                 canGrabLedge = false;
 
                 Vector2 ledgePos = GetComponentInChildren<LedgeDetection>().transform.position;
