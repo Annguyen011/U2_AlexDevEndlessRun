@@ -6,7 +6,7 @@ namespace U2
 {
     public class Trap : MonoBehaviour
     {
-        private void OnTriggerEnter2D(Collider2D collision)
+        protected virtual void OnTriggerEnter2D(Collider2D collision)
         {
             if(collision.CompareTag("Player"))
             {
