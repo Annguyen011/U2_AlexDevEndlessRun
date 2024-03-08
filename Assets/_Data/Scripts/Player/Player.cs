@@ -110,12 +110,12 @@ namespace U2
         private void Update()
         {
             AnimatorCtrl();
-            
-            if(isDead)
+
+            if (isDead)
             {
                 return;
             }
-            
+
             if (isKnocked)
             {
                 return;
@@ -369,6 +369,15 @@ namespace U2
             yield return new WaitForSeconds(.5f);
 
             rb.velocity = Vector2.zero;
+        }
+
+        // Hit
+        public void Damage()
+        {
+            if (moveSpeed >= maxSpeed)
+                Knockback();
+            else
+                StartCoroutine(Die());
         }
 
         #endregion
