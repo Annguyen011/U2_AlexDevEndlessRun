@@ -11,8 +11,12 @@ namespace U2
     public class Player : MonoBehaviour
     {
         #region [Abilities]
-        [Header("# Move infos")]
+        [Header("# Player infos")]
         public bool playerUnlock;
+        private bool isDead;
+
+
+        [Header("# Move infos")]
         [SerializeField] private float moveSpeed;
         [SerializeField] private float maxSpeed;
         [SerializeField] private float speedMuiltipler;
@@ -106,6 +110,12 @@ namespace U2
         private void Update()
         {
             AnimatorCtrl();
+            
+            if(isDead)
+            {
+                return;
+            }
+            
             if (isKnocked)
             {
                 return;
@@ -345,6 +355,20 @@ namespace U2
             }
 
             canBeKnocked = true;
+        }
+
+        // Die
+
+        private IEnumerator Die()
+        {
+            isDead = true;
+            canBeKnocked = false;
+            rb.velocity = knockbackDir;
+            anim.SetBool("isDead", true);
+
+            yield return new WaitForSeconds(.5f);
+
+            rb.velocity = Vector2.zero;
         }
 
         #endregion
