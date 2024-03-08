@@ -6,16 +6,22 @@ namespace U2
 {
     public class PlatformController : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        [SerializeField] private SpriteRenderer sprite;
+        [SerializeField] private SpriteRenderer headerSprite;
+
+        private void Start()
         {
-        
+            headerSprite.transform.parent = transform.parent;
+            headerSprite.transform.localPosition = new Vector3(sprite.bounds.size.x, .2f);
+            headerSprite.transform.position = new Vector3(transform.position.x, sprite.bounds.max.y);
         }
 
-        // Update is called once per frame
-        void Update()
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-        
+            if (collision.CompareTag("Player"))
+            {
+                headerSprite.color = GameManager.instance.platfromColor;
+            }
         }
     }
 }

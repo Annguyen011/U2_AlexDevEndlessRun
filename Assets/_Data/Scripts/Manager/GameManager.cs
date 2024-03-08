@@ -11,6 +11,9 @@ namespace U2
         [Header("# Coin")]
         public int coins;
 
+        [Header("# Color")]
+        public Color platfromColor = Color.white;
+
         private void Awake()
         {
             instance = this;
