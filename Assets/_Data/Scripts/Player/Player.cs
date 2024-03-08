@@ -21,10 +21,14 @@ namespace U2
         private float defaultSpeed;
         private float defaultMilestoneIncrease;
 
+        [Space]
+
         [Header("# Jump infos")]
         [SerializeField] private float jumpForce;
         [SerializeField] private float doubleJumpForce;
         private bool canDoubleJump;
+
+        [Space]
 
         [Header("# Slide infos")]
         [SerializeField] private float slideSpeed;
@@ -33,6 +37,8 @@ namespace U2
         private float slideTimeCounter;
         private float slideCoolDonCounter;
         private bool isSliding;
+
+        [Space]
 
         [Header("# Ledge infos")]
         public bool ledgeDetected;
@@ -43,9 +49,15 @@ namespace U2
         private bool canGrabLedge = true;
         private bool canClimb;
 
+        [Space]
+
         [Header("# Knock")]
         [SerializeField] private Vector2 knockbackDir = new Vector2(-12, 7);
+        [SerializeField] private int timeForInvincibility = 7;
         private bool isKnocked;
+        private bool canBeKnocked = true;
+
+        [Space]
 
         [Header("# Collision check")]
         public LayerMask whatisground;
@@ -59,6 +71,7 @@ namespace U2
         private bool wallDetected;
         private bool ceilingDetected;
 
+        [Space]
 
         [Header("# Animator")]
         [SerializeField] private string moveAnim;
@@ -69,6 +82,7 @@ namespace U2
         // Components
         private Rigidbody2D rb;
         private Animator anim;
+        private SpriteRenderer sprite;
 
         #endregion
 
@@ -78,6 +92,7 @@ namespace U2
         {
             rb = GetComponent<Rigidbody2D>();
             anim = GetComponent<Animator>();
+            sprite = GetComponent<SpriteRenderer>();
         }
 
         private void Start()
@@ -91,7 +106,7 @@ namespace U2
         private void Update()
         {
             AnimatorCtrl();
-            if(isKnocked)
+            if (isKnocked)
             {
                 return;
             }
@@ -223,14 +238,14 @@ namespace U2
             if (moveSpeed == maxSpeed)
                 return;
 
-            if(transform.position.x > speedMinstone)
+            if (transform.position.x > speedMinstone)
             {
                 speedMinstone = speedMinstone + minstoneIncreaser;
 
                 moveSpeed *= speedMuiltipler;
                 minstoneIncreaser *= speedMuiltipler;
 
-                if(moveSpeed > maxSpeed)
+                if (moveSpeed > maxSpeed)
                 {
                     moveSpeed = maxSpeed;
                 }
@@ -292,12 +307,17 @@ namespace U2
 
         private void AllowLedgeCrab()
         {
-             canGrabLedge = true;
+            canGrabLedge = true;
         }
 
         // Knock back
         private void Knockback()
         {
+            if (!canBeKnocked)
+            {
+                return;
+            }
+            StartCoroutine(Invicibility());
             isKnocked = true;
             rb.velocity = knockbackDir;
         }
@@ -310,8 +330,21 @@ namespace U2
         // Invicibility
         private IEnumerator Invicibility()
         {
+            Color originalColor = sprite.color;
+            Color newColor = new Color(sprite.color.r, sprite.color.g, sprite.color.b, .5f);
 
-            yield return new WaitForSeconds(.5f);
+            canBeKnocked = false;
+
+            for (int i = 0; i < timeForInvincibility; i++)
+            {
+                sprite.color = newColor;
+
+                yield return new WaitForSeconds(.1f);
+
+                sprite.color = originalColor;
+            }
+
+            canBeKnocked = true;
         }
 
         #endregion
