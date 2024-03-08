@@ -369,6 +369,10 @@ namespace U2
             yield return new WaitForSeconds(.5f);
 
             rb.velocity = Vector2.zero;
+
+            yield return new WaitForSeconds(1f);
+
+            GameManager.instance.ResetLevel();
         }
 
         // Hit

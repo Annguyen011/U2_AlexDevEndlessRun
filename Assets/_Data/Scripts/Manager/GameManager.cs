@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace U2
 {
@@ -18,5 +19,7 @@ namespace U2
         {
             instance = this;
         }
+
+        public void ResetLevel() => SceneManager.LoadScene(SceneManager.GetActiveScene().ToString());
     }
 }
